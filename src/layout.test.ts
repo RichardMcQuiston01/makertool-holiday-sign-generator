@@ -276,6 +276,41 @@ describe('computeSignLayout', () => {
     }
   });
 
+  it('keeps mounting holes fully inside round and ellipse backers', () => {
+    for (const shape of ['round', 'ellipse'] as const) {
+      const result = computeSignLayout(
+        baseConfig({shape, mounting: {type: 'screw', screwSize: 'M3'}}),
+        sayingFont,
+        undefined,
+        undefined,
+        'Merry Christmas',
+      );
+      expect(result.ok).toBe(true);
+      if (!result.ok) continue;
+
+      const {backer, mountingHoles} = result.value;
+      expect(mountingHoles).toHaveLength(2);
+      const rx = backer.width / 2;
+      const ry = backer.height / 2;
+      const cx = backer.width / 2;
+      const cy = backer.height / 2;
+
+      for (const hole of mountingHoles ?? []) {
+        const holeRadius = hole.diameter / 2;
+        // Sample points all the way around the hole's own circle, not just
+        // its center — a hole whose center is inside the ellipse can still
+        // have its edge poke outside it.
+        for (let i = 0; i < 32; i += 1) {
+          const angle = (i / 32) * 2 * Math.PI;
+          const x = hole.center.x + holeRadius * Math.cos(angle);
+          const y = hole.center.y + holeRadius * Math.sin(angle);
+          const normalized = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2;
+          expect(normalized).toBeLessThanOrEqual(1);
+        }
+      }
+    }
+  });
+
   it('lays out every bundled holiday image without error', () => {
     for (const holiday of ['christmas', 'halloween', 'thanksgiving'] as const) {
       const image = getHolidayContent(holiday).images[0];

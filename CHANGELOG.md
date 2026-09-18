@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-18
+
+### Fixed
+
+- **`getGlyphOutline`/`getTextOutline` were broken under Node** since 0.1.0's
+  browser-bundling fix (the namespace import for `opentype.js`): Node
+  resolves opentype.js's CJS build via the package's `main` field, and
+  Node's CJS→ESM interop doesn't reliably mirror that build's named exports
+  (`parse`, `Font`, ...) onto the namespace object — so `opentype.parse` was
+  `undefined` there, even though it worked under Vite/Rollup (which resolve
+  the real ESM build via `module`, where the namespace import already has
+  those exports directly). `font.ts` now unwraps the CJS interop's
+  `.default` when present (a no-op under real ESM, which has none), fixing
+  Node consumers — the CLI included — without breaking the browser case.
+  Caught via an end-to-end CLI smoke test against a real font.
+- `computeSignLayout()`'s two screw-mounting holes could land outside a
+  `round`/`ellipse` backer's curved edge — the placement only accounted for
+  a rectangular boundary. They're now positioned relative to the backer's
+  actual shape (exact for `square`/`rectangle`; a conservative inward-offset
+  approximation for `round`/`ellipse`, safe as long as the hole is small
+  relative to the backer, which it is in practice).
+
 ## [0.1.0] - 2026-09-18
 
 ### Added

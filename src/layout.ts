@@ -283,16 +283,43 @@ function computeBacker(
   }
 }
 
-// Places two mounting holes near the top edge for hanging the finished sign.
-// This is a coarse fit (not solved against the exact backer boundary curve
-// for round/ellipse shapes), so callers using a small margin with those
-// shapes should double check the holes land inside the cut outline.
+// Placed symmetrically near the top of the backer for hanging the finished
+// sign. `clearance` keeps each hole's cut circle from crowding the backer's
+// own edge, on top of the hole's own radius.
+const MOUNTING_HOLE_CLEARANCE_FACTOR = 0.5;
+// Degrees above horizontal, from the backer's center, for round/ellipse
+// hole placement — high enough to sit near the top, spread apart in x.
+const MOUNTING_HOLE_ANGLE_DEGREES = 55;
+
 function placeMountingHoles(
   backer: SignBacker,
   diameter: number,
 ): MountingHole[] {
-  const insetY = diameter * 1.5;
-  const insetX = backer.width * 0.25;
+  const holeRadius = diameter / 2;
+  const margin = holeRadius + diameter * MOUNTING_HOLE_CLEARANCE_FACTOR;
+
+  if (backer.shape === 'round' || backer.shape === 'ellipse') {
+    // Inset from the curved edge by shrinking each semi-axis by `margin`.
+    // This isn't the ellipse's exact inward offset curve (which isn't
+    // itself an ellipse), but it's a conservative approximation: safe as
+    // long as margin is small relative to the backer, which it is here.
+    const rx = Math.max(backer.width / 2 - margin, 0);
+    const ry = Math.max(backer.height / 2 - margin, 0);
+    const angle = (MOUNTING_HOLE_ANGLE_DEGREES * Math.PI) / 180;
+    const dx = rx * Math.cos(angle);
+    const dy = ry * Math.sin(angle);
+    const cx = backer.width / 2;
+    const cy = backer.height / 2;
+    return [
+      {center: {x: cx - dx, y: cy + dy}, diameter},
+      {center: {x: cx + dx, y: cy + dy}, diameter},
+    ];
+  }
+
+  // square / rectangle: straight edges, so a fixed inset from each edge
+  // keeps the holes inside exactly, not just approximately.
+  const insetY = Math.max(diameter * 1.5, margin);
+  const insetX = Math.max(backer.width * 0.25, margin);
   const y = backer.height - insetY;
   return [
     {center: {x: insetX, y}, diameter},

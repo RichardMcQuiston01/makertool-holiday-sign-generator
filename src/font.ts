@@ -1,10 +1,22 @@
-// Namespace import, not default: opentype.js's real ESM build (dist/opentype.mjs,
-// resolved by browser bundlers like Vite/Rollup via the package's "module"
-// field) exports Font/Glyph/Path/parse/etc. as named exports with no default —
-// only the CJS build synthesizes one. A default import works under Node/tsup
-// (which resolve the CJS build) but breaks strict ESM bundling downstream.
-import * as opentype from 'opentype.js';
+import * as opentypeModule from 'opentype.js';
 import type {Result} from './types.js';
+
+// opentype.js's package.json has no "exports" map, so which build Node vs. a
+// bundler resolves — and how this namespace import lands — differs:
+//  - Bundlers (Vite/Rollup) resolve the "module" field (dist/opentype.mjs), a
+//    real ESM build with only named exports (Font/parse/...), no default.
+//    The namespace import above already has parse/Font/etc. directly on it.
+//  - Node resolves the "main" field (dist/opentype.js), a CJS build. Node's
+//    CJS->ESM interop puts the whole `module.exports` on `.default` and
+//    *tries* to mirror named properties onto the namespace object too, but
+//    that mirroring isn't reliable for every CJS shape — for this package it
+//    doesn't happen, so `opentypeModule.parse` is undefined here even though
+//    `opentypeModule.default.parse` exists.
+// Unwrapping `.default` when present (a no-op under real ESM, which has none)
+// gives a `parse`/`Font`/... object that works in both.
+const opentype: typeof opentypeModule =
+  (opentypeModule as unknown as {default?: typeof opentypeModule}).default ??
+  opentypeModule;
 
 /** Vector path command, mirroring the SVG/Canvas path command grammar. */
 export type PathCommand =
