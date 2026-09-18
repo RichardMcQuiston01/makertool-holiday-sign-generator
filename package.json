@@ -1,6 +1,6 @@
 {
   "name": "@richardmcquiston01/holiday-sign-generator",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generates SVG/DXF laser-cutter cut and engrave files for holiday-themed signs.",
   "keywords": [
     "holiday-sign",
