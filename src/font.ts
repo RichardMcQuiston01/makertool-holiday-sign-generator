@@ -1,4 +1,9 @@
-import opentype from 'opentype.js';
+// Namespace import, not default: opentype.js's real ESM build (dist/opentype.mjs,
+// resolved by browser bundlers like Vite/Rollup via the package's "module"
+// field) exports Font/Glyph/Path/parse/etc. as named exports with no default —
+// only the CJS build synthesizes one. A default import works under Node/tsup
+// (which resolve the CJS build) but breaks strict ESM bundling downstream.
+import * as opentype from 'opentype.js';
 import type {Result} from './types.js';
 
 /** Vector path command, mirroring the SVG/Canvas path command grammar. */
