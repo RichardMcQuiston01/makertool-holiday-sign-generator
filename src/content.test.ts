@@ -114,3 +114,17 @@ describe('HOLIDAY_CATALOG keys', () => {
     );
   });
 });
+
+describe('bundled motifs', () => {
+  it('leads Halloween with the skull and keeps the pumpkin', () => {
+    const ids = getHolidayContent('halloween').images.map(i => i.id);
+    expect(ids).toEqual(['skull', 'pumpkin']);
+  });
+
+  it('draws the Valentine heart as one closed outline', () => {
+    const [heart] = getHolidayContent('valentinesDay').images;
+    expect(heart?.id).toBe('heart');
+    expect(heart?.paths).toHaveLength(1);
+    expect(heart?.paths[0]?.at(-1)?.type).toBe('Z');
+  });
+});

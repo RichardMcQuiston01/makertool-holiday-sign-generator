@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Halloween's first image is now a skull** (`skull`): cranium and jaw as one
+  outline, eye sockets, nose, and teeth. The pumpkin is kept as the second
+  Halloween image, so `resolveImage('halloween', 'pumpkin')` still resolves;
+  consumers that take `images[0]` get the skull.
+- **The Valentine heart is redrawn as a single closed outline.** It was two
+  overlapping ellipses plus a triangle, which line-engraved as visible
+  circles and a crossbar inside the heart.
+
 ## [0.1.1] - 2026-09-18
 
 ### Fixed
