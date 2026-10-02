@@ -158,6 +158,51 @@ const CHRISTMAS_TREE: ImageOption = {
   ],
 };
 
+// Cranium and jaw as one closed outline, round eye sockets, a triangular
+// nose, and a teeth line with three dividers across the jaw.
+const HALLOWEEN_SKULL: ImageOption = {
+  id: 'skull',
+  label: 'Skull',
+  paths: [
+    [
+      {type: 'M', x: 50, y: 96},
+      {type: 'C', x1: 74, y1: 96, x2: 90, y2: 80, x: 90, y: 58},
+      {type: 'C', x1: 90, y1: 46, x2: 85, y2: 38, x: 77, y: 34},
+      {type: 'L', x: 73, y: 22},
+      {type: 'C', x1: 73, y1: 12, x2: 67, y2: 6, x: 59, y: 6},
+      {type: 'L', x: 41, y: 6},
+      {type: 'C', x1: 33, y1: 6, x2: 27, y2: 12, x: 27, y: 22},
+      {type: 'L', x: 23, y: 34},
+      {type: 'C', x1: 15, y1: 38, x2: 10, y2: 46, x: 10, y: 58},
+      {type: 'C', x1: 10, y1: 80, x2: 26, y2: 96, x: 50, y: 96},
+      {type: 'Z'},
+    ],
+    ellipse(33, 54, 11, 12),
+    ellipse(67, 54, 11, 12),
+    polygon([
+      [50, 44],
+      [56, 32],
+      [44, 32],
+    ]),
+    line([
+      [33, 19],
+      [67, 19],
+    ]),
+    line([
+      [41, 6],
+      [41, 19],
+    ]),
+    line([
+      [50, 6],
+      [50, 19],
+    ]),
+    line([
+      [59, 6],
+      [59, 19],
+    ]),
+  ],
+};
+
 const HALLOWEEN_PUMPKIN: ImageOption = {
   id: 'pumpkin',
   label: 'Pumpkin',
@@ -231,17 +276,22 @@ const EASTER_EGG: ImageOption = {
   ],
 };
 
+// One closed outline (two lobes meeting in a dip, tapering to a point), so a
+// line engrave traces a single clean heart instead of overlapping circles.
 const VALENTINES_HEART: ImageOption = {
   id: 'heart',
   label: 'Heart',
   paths: [
-    ellipse(32, 64, 22, 20),
-    ellipse(68, 64, 22, 20),
-    polygon([
-      [10, 58],
-      [90, 58],
-      [50, 8],
-    ]),
+    [
+      {type: 'M', x: 50, y: 8},
+      {type: 'C', x1: 38, y1: 22, x2: 10, y2: 40, x: 10, y: 64},
+      {type: 'C', x1: 10, y1: 80, x2: 22, y2: 90, x: 34, y: 90},
+      {type: 'C', x1: 42, y1: 90, x2: 48, y2: 85, x: 50, y: 78},
+      {type: 'C', x1: 52, y1: 85, x2: 58, y2: 90, x: 66, y: 90},
+      {type: 'C', x1: 78, y1: 90, x2: 90, y2: 80, x: 90, y: 64},
+      {type: 'C', x1: 90, y1: 40, x2: 62, y2: 22, x: 50, y: 8},
+      {type: 'Z'},
+    ],
   ],
 };
 
@@ -291,7 +341,7 @@ export const HOLIDAY_CATALOG: Readonly<Record<Holiday, HolidayContent>> = {
       {id: 'trickOrTreat', text: 'Trick or Treat'},
       {id: 'boo', text: 'Boo!'},
     ],
-    images: [HALLOWEEN_PUMPKIN],
+    images: [HALLOWEEN_SKULL, HALLOWEEN_PUMPKIN],
   },
   thanksgiving: {
     holiday: 'thanksgiving',
