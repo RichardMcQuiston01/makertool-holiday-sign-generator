@@ -1,6 +1,6 @@
 {
   "name": "@richardmcquiston01/holiday-sign-generator",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Generates SVG/DXF laser-cutter cut and engrave files for holiday-themed signs.",
   "keywords": [
     "holiday-sign",
@@ -40,6 +40,10 @@
   "homepage": "https://github.com/RichardMcQuiston01/makertool-holiday-sign-generator#readme",
   "bugs": {
     "url": "https://github.com/RichardMcQuiston01/makertool-holiday-sign-generator/issues"
+  },
+  "funding": {
+    "type": "individual",
+    "url": "https://donate.stripe.com/00w5kD3Gj1Xo9v7gVOcs800"
   },
   "publishConfig": {
     "access": "public"
